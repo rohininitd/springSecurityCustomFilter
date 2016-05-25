@@ -1,0 +1,25 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+	<security:http create-session="never" use-expressions="false"
+		auto-config="false" entry-point-ref="linkForbiddenEntryPoint">
+		<security:intercept-url pattern="/secured"
+			access="ROLE_USER" />
+		<security:custom-filter position="PRE_AUTH_FILTER"
+			ref="customFilter" />
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider
+			ref="provider">
+		</security:authentication-provider>
+	</security:authentication-manager>
+	<bean id="customFilter" class="spring.custom.filter.SecurityFilter">
+		<property name="authenticationManager" ref="manager" />
+	</bean>
+</beans>
